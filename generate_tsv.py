@@ -99,7 +99,18 @@ for dsp_catalogue_file in dsp_catalogue_files:
                         else:
                            title_string = 'No title found'
 
-                        print gocCatalogueNumber + "\t" + department_string + "\t" + title_string + "\t" + url.text
+                        # Get the value of the 'generalNote' element so we can add it to the 'Description' field
+                        # in the import metadata.
+                        generalNotes = publication.findall('generalNote')
+                        if len(generalNotes):
+                                general_notes_values = [note.text.encode('utf-8') for note in generalNotes]
+                                description_string = ' '.join(general_notes_values)
+                        
+
+                        # This is the original output
+                        # print gocCatalogueNumber + "\t" + department_string + "\t" + title_string + "\t" + url.text
+                        # This is the output with metadata
+                        print url.text + "\t" + title_string + "\t" + description_string + "\t" + department_string
 
 if len(sys.argv) == 2 and sys.argv[1] == 'formats':
     print "Number of URLs, by format", num_urls_with_formats
